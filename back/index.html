@@ -1,0 +1,21 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/falcor/0.1.15/falcor.browser.min.js"></script>
+<script>
+var model = new falcor.Model({source: new falcor.HttpDataSource('/model.json')});
+model.get(
+  'films.length',
+  'films[0..6]["Title","title","id","episode_id","tomatoReviews"]',
+  'films[0..6]["planets"][0..2]["name"]',
+  'planets.length',
+  'planets[0..2]["name"]'
+).then(function(response) {
+    document.getElementById('event-data').innerHTML = JSON.stringify(response, null, 2);
+}).catch(function(e) {
+        document.getElementById('event-data').innerHTML = JSON.stringify(e, null, 2);
+});
+</script>
+<body>
+<pre id="event-data">Loading</pre>
+</body>
+</html>
