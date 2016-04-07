@@ -7,7 +7,7 @@
     "esformatter": "esformatter -i *.js",
     "debug": "iron-node index.js",
     "dev": "nodemon index.js --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "author": "Dave Goddard <dave@goddard.id.au>",
   "license": "ISC",
@@ -27,10 +27,13 @@
     "babel-preset-stage-0": "^6.5.0",
     "esformatter": "^0.9.3",
     "esformatter-quotes": "^1.0.3",
+    "jasmine": "^2.4.1",
     "nodemon": "^1.9.1"
   },
   "esformatter": {
-    "plugins": ["esformatter-quotes"],
+    "plugins": [
+      "esformatter-quotes"
+    ],
     "quotes": {
       "type": "single"
     },
