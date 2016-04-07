@@ -24,11 +24,11 @@ export default class App extends Component {
                     <Films path='/films' />
                     <Films path='/films/:filmId' />
                     <Planets path='/planets' />
-                    <Planets path='/planets/:planetsId' />
+                    <Planets path='/planets/:planetId' />
                     <Species path='/species' />
 					<Species path='/species/:speciesId' />
 				</Router>
 			</div>
-            );
+        );
     }
 }

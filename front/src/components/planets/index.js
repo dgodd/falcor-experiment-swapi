@@ -1,23 +1,38 @@
 import { h, Component } from 'preact';
-import { route } from 'preact-router';
+import { route, Link } from 'preact-router';
 import model from '../../lib/falcor-model';
 import { map, sortBy, range, filter } from 'lodash';
 import style from './style';
 
-export class DetailInner extends Component {
-    static queries() { return [[["name","classification","designation","average_height","skin_colors","hair_colors","eye_colors"]]] };
+export class Planet extends Component {
+    static queries() { return [[["name"]]] };
+    
+    render({ planet, active }) {
+        if (!planet) return '';
+        return (
+          <div style={{width:'300px',color:(active?'red':'green')}} onclick={this.props.onSelect}>
+                <h3>{planet.name}</h3>
+          </div>  
+        );
+    }
+}
 
-    render({ species }) {
+export class DetailInner extends Component {
+    static queries() { return [[["id","name","climate","diameter","gravity","orbital_period",'population','rotation_period','surface_water','terrain']]] };
+
+    render({ planet }) {
         return (
             <div>
-                <h1>{species.name}</h1>
+                <h1>{planet.name}</h1>
                 <dl>
-                    <dt>classification</dt><dd>{species.classification}</dd>
-                    <dt>designation</dt><dd>{species.designation}</dd>
-                    <dt>average_height</dt><dd>{species.average_height}</dd>
-                    <dt>skin_colors</dt><dd>{species.skin_colors}</dd>
-                    <dt>hair_colors</dt><dd>{species.hair_colors}</dd>
-                    <dt>eye_colors</dt><dd>{species.eye_colors}</dd>
+                    <dt>climate</dt><dd>{planet.climate}</dd>
+                    <dt>diameter</dt><dd>{planet.diameter}</dd>
+                    <dt>gravity</dt><dd>{planet.gravity}</dd>
+                    <dt>orbital_period</dt><dd>{planet.orbital_period}</dd>
+                    <dt>population</dt><dd>{planet.population}</dd>
+                    <dt>rotation_period</dt><dd>{planet.rotation_period}</dd>
+                    <dt>surface_water</dt><dd>{planet.surface_water}</dd>
+                    <dt>terrain</dt><dd>{planet.terrain}</dd>
                 </dl>
             </div>
         )
@@ -25,43 +40,29 @@ export class DetailInner extends Component {
 }
 
 export class Detail extends Component {
-    state = { species: null };
+    state = { planet: null };
     
-    getData(speciesId) {
-        this.setState({ species: null });
-        if (!speciesId) return;
+    getData(planetId) {
+        this.setState({ planet: null });
+        if (!planetId) return;
         model.get(
-            ['speciesById',speciesId,["id"]],
-            ...DetailInner.queries().map(q => ['speciesById',speciesId,...q]),
+            ['planetsById',planetId,["id","name"]],
+            ...DetailInner.queries().map(q => ['planetsById',planetId,...q]),
         ).then((data) => {
-            this.setState({ species: data.json.speciesById[speciesId] });
+            this.setState({ planet: data.json.planetsById[planetId] });
         }).catch((err) => console.log(["err", err]) );
 	}
     componentDidMount() {
-        this.getData(this.props.speciesId);
+        this.getData(this.props.planetId);
     }
-    componentWillReceiveProps({ speciesId }) {
-        this.getData(speciesId);
+    componentWillReceiveProps({ planetId }) {
+        this.getData(planetId);
     }
-    render({}, { species }) {
-        if(species) {
-            return (<DetailInner species={species} />);
+    render({}, { planet }) {
+        if(planet) {
+            return (<DetailInner planet={planet} />);
         }
-        return (this.props.speciesId ? <h1>Loading...</h1> : null);
-    }
-}
-
-
-export  class Item extends Component {
-    static queries() { return [[["name"]]] };
-    
-    render({ specie, active }) {
-        if (!specie) return '';
-        return (
-          <div style={{color:(active?'red':'green')}} onclick={this.props.onSelect}>
-                <h3>{specie.name}</h3>
-          </div>  
-        );
+        return (this.props.planetId ? <h1>Loading...</h1> : null);
     }
 }
 
@@ -78,40 +79,37 @@ export default class Planets extends Component {
         model.get(
             ['planets','count'],
             ['planets',{from:0,to:this.state.maxPlanets},"id"],
-            ...Item.queries().map(q => ['planets',{from:0,to:this.state.maxPlanets},...q]),
-        ).then((data) => {
-            console.log('then', data.json);
+            ...Planet.queries().map(q => ['planets',{from:0,to:this.state.maxPlanets},...q]),
+        ).subscribe((data) => {
             this.setState({ planets: data.json.planets });
-        }).catch(e => console.log(e));
-    }
-    increase() {
-        this.setState({ maxPlanets: this.state.maxPlanets + 10 });
-        console.log(this.state.maxPlanets);
-        this.getData();
-    }
+        });
+	}
     
-    onSelect(item) {
-        route(`/planets/${item.id}`)
+    onSelect(planet) {
+        route(`/planets/${planet.id}`)
     }
 
-    render({ planetsId }, { planets, maxPlanets }) {
-        console.log('render');
-        var arr = filter(map(range(planets.count), (i) => planets[i]), (s) => s);
-        //arr = sortBy(arr, (s) => s.name);
-        
+    increase() {
+        this.setState({ maxPlanets: this.state.maxPlanets + 10 });
+        this.getData();
+    }    
+
+    render({ planetId }, { planets, maxPlanets }) {
+        var planetArr = filter(map(range(planets.count), (i) => planets[i]));
+
 		return (
 			<div class={style.planets}>
                 <div class={style.list}>
                     <h1>Planets : { planets.count }</h1>
                     <div>
-                        {map(arr, (item) => <Item specie={item} active={item.id==planetsId} onSelect={this.onSelect.bind(this,item)} />)}
+                        {map(planetArr, (planet) => <Planet planet={planet} active={planet.id==planetId} onSelect={this.onSelect.bind(this,planet)} />)}
                     </div>
                     { planets.count && maxPlanets < planets.count ?
                         <div><a onclick={this.increase.bind(this) }>more</a></div>
                         : '' }
                 </div>
                 <div class={style.details}>
-                    <Detail speciesId={planetsId} />
+                    <Detail planetId={planetId} />
                 </div>
 			</div>
 		);
