@@ -47,7 +47,6 @@ export const speciesRoutes = [
                     }
                 });
             }));
-            console.log(flatten(data));
             return flatten(data);
         }
     }

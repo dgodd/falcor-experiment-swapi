@@ -47,7 +47,6 @@ export const planetsRoutes = [
                     }
                 });
             }));
-            console.log(flatten(data));
             return flatten(data);
         }
     }
