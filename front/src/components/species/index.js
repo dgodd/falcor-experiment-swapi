@@ -80,13 +80,11 @@ export default class Species extends Component {
             ['species',{from:0,to:this.state.maxSpecies},"id"],
             ...Item.queries().map(q => ['species',{from:0,to:this.state.maxSpecies},...q]),
         ).then((data) => {
-            console.log('then', data.json);
             this.setState({ species: data.json.species });
         }).catch(e => console.log(e));
     }
     increase() {
         this.setState({ maxSpecies: this.state.maxSpecies + 10 });
-        console.log(this.state.maxSpecies);
         this.getData();
     }
     
@@ -95,7 +93,6 @@ export default class Species extends Component {
     }
 
     render({ speciesId }, { species, maxSpecies }) {
-        console.log('render', species);
         var arr = filter(map(range(species.count), (i) => species[i]), (s) => s);
         //arr = sortBy(arr, (s) => s.name);
         

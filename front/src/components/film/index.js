@@ -41,13 +41,11 @@ export class Detail extends Component {
     
     getData(filmId) {
         this.setState({ film: null });
-        console.log(["Detail", filmId]);
         if (!filmId) return;
         model.get(
             ['filmsById',filmId,["id","Title","episode_id","Poster"]],
             ...DetailInner.queries().map(q => ['filmsById',filmId,...q]),
         ).then((data) => {
-            console.log(["Detail", filmId, data]);
             this.setState({ film: data.json.filmsById[filmId] });
         }).catch((err) => console.log(["err", err]) );
 	}
@@ -78,7 +76,6 @@ export default class Films extends Component {
             ...Film.queries().map(q => ['films',{from:0,to:6},...q]),
         ).subscribe((data) => {
             window.myFilms = data.json.films;
-            console.log(data.json.films);
             this.setState({ films: data.json.films });
         });
 	}
