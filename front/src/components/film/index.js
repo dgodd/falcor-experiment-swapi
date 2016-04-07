@@ -29,8 +29,8 @@ export class DetailInner extends Component {
                 <h1>{film.title} ({film.episode_id}) </h1>
                 <div>Awards: {film.Awards}</div>
                 <div>TomatoMeter: {film.tomatoMeter}</div>                
-                <div>Planets ({film.planets.count}): {map(filter(film.planets, p => p.id), (p) => <Link href={`/planets/${p.id}`}>{p.name}, </Link>)}</div>
-                <div>Species ({film.species.count}): {map(filter(film.species, s => s.id), (s) => <Link href={`/species/${s.id}`}>{s.name}, </Link>)}</div>
+                <div>Planets ({film.planets.count}): {map(filter(film.planets, p => p && p.id), (p) => <Link href={`/planets/${p.id}`}>{p.name}, </Link>)}</div>
+                <div>Species ({film.species.count}): {map(filter(film.species, s => s && s.id), (s) => <Link href={`/species/${s.id}`}>{s.name}, </Link>)}</div>
             </div>
         )
     }

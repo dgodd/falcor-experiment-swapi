@@ -111,10 +111,10 @@ export const filmRoutes = [
                         var url = film[attribute][idx];
                         return {
                             path: ['filmsById', id, attribute, idx],
-                            value: {
+                            value: url ? {
                                 $type: 'ref',
                                 value: [`${attribute}ById`, swapiUrlToId(url)]
-                            }
+                            } : null
                         }
                     });
                 })
