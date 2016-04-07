@@ -7,6 +7,7 @@
     "esformatter": "esformatter -i *.js",
     "debug": "iron-node debug.js",
     "dev": "nodemon index.js --exec babel-node",
+    "download": "babel-node fixtures/download.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dave Goddard <dave@goddard.id.au>",
