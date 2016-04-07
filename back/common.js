@@ -1,4 +1,9 @@
-var fetch = require('node-fetch');
+const origFetch = require('node-fetch');
+
+export function fetch(url) {
+	url = url.replace(/^http:\/\/swapi.co\//, 'http://localhost:3034/');
+	return origFetch(url);
+}
 
 export function routeCacheUrl(obj, url) {
     if (!obj.cache)
@@ -38,9 +43,11 @@ export async function getPages(obj, type, pages) {
         var data = await routeCacheUrl(obj, `http://swapi.co/api/${type}/?page=${page + 1}`);
         data.results.forEach((o, idx) => {
             o.id = swapiUrlToId(o.url);
-            obj.cache[type][o.id] = o;
+            if(o.id)
+                obj.cache[type][o.id] = o;
             indexedData[(page * 10) + idx] = o;
         });
     }));
+
     return indexedData;
 }

@@ -1,6 +1,5 @@
 import { routeCacheUrl, swapiUrlToId, swapiUrlToType, swapiUrlToRef, getPages } from './common';
 import { flatten, uniq } from 'lodash';
-import fetch from 'node-fetch';
 
 export const filmRoutes = [
     {
@@ -18,7 +17,6 @@ export const filmRoutes = [
             console.log('films', indices);
             var pages = uniq(indices.map(i => Math.floor(i / 10)));
             var data = await getPages(this, 'films', pages);
-
             return indices.map(index => ({
                 path: ['films', index],
                 value: {
@@ -47,7 +45,6 @@ export const filmRoutes = [
                     }
                 });
             }));
-            console.log(flatten(data));
             return flatten(data);
         }
     }, {

@@ -1,6 +1,5 @@
 import { createRoutes } from 'falcor-saddle';
-import { routeCacheUrl, swapiUrlToId } from './common';
-import fetch from 'node-fetch';
+import { fetch, swapiUrlToId } from './common';
 
 export const peopleRoutes = createRoutes({
     routeBasename: 'people',

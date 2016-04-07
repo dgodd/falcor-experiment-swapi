@@ -1,6 +1,5 @@
 import { routeCacheUrl, swapiUrlToId, swapiUrlToType, getPages } from './common';
 import { flatten, uniq } from 'lodash';
-import fetch from 'node-fetch';
 
 export const planetsRoutes = [
     {

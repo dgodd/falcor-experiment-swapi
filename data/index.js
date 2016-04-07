@@ -29,8 +29,10 @@ forEach(keys, (name) => {
             var key2 = key == 'people' ? 'characters' : key;
             if (obj[key2]) {
                 forEach(obj[key2], (fk) => {
-                    if (!dataHashes[key][fk][name]) dataHashes[key][fk][name] = [];
-                    if (!includes(dataHashes[key][fk][name], id)) dataHashes[key][fk][name].push(id);
+                    if (dataHashes[key][fk]) {
+                        if (!dataHashes[key][fk][name]) dataHashes[key][fk][name] = [];
+                        if (!includes(dataHashes[key][fk][name], id)) dataHashes[key][fk][name].push(id);
+                    }
                 });
             }
         });
@@ -51,13 +53,24 @@ forEach(dataHashes, (obj2, name) => {
     });
 });    
 
+const getOffsetFromPage = (page) => {
+    page = parseInt(page, 10);
+    if (!(page > 0)) page = 1;
+    var offset = (page - 1) * 10;
+    return offset;
+}
 
 forEach(keys, (key) => {
     server.route({
         method: 'GET',
         path: `/api/${key}/`,
         handler: function(request, reply) {
-            return reply(map(dataArrays[key], id => dataHashes[key]));
+            var offset = getOffsetFromPage(request.query.page);
+            var ids = dataArrays[key].slice(offset, offset + 10);
+            return reply({
+                count: dataArrays[key].length,
+                results: map(ids, id => dataHashes[key][id])
+            });
         }
     });
     server.route({
