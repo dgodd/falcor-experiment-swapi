@@ -1,0 +1,38 @@
+{
+  "name": "swapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "esformatter": "esformatter -i *.js",
+    "debug": "iron-node debug.js",
+    "dev": "nodemon index.js --exec babel-node",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dave Goddard <dave@goddard.id.au>",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^13.3.0",
+    "lodash-es": "^4.6.1",
+    "node-fetch": "^1.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "esformatter": "^0.9.3",
+    "esformatter-quotes": "^1.0.3",
+    "nodemon": "^1.9.1"
+  },
+  "esformatter": {
+    "plugins": [
+      "esformatter-quotes"
+    ],
+    "quotes": {
+      "type": "single"
+    },
+    "indent": {
+      "value": "    "
+    }
+  }
+}
